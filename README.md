@@ -1,9 +1,14 @@
 # Dune Analytics API
 
+A simple framework for interacting with Dune Analytics unsupported API. The primary
+class (`DuneAnalytics`) of this repo is adapted from
+https://github.com/itzmestar/duneanalytics at commit
+bdccd5ba543a8f3679e2c81e18cee846af47bc52
+
 ## Installation & Usage
 
 ```shell
-python3 -m venv env
+python3 -m venv venv
 source ./env/bin/activate
 pip install -r requirements.txt
 cp .env.sample .env
@@ -21,11 +26,20 @@ found here initiate and execute query, returning the results.
 
 ### Example Usage
 
-To fetch the total eth spent, realized fees and cow rewards for an accounting period run
-the period totals script as follows
+To fetch some sample ethereum block data, run the sample script as:
 
 ```shell
-python -m src.fetch.period_totals --start '2022-02-01' --end '2022-02-08'
+python -m src.sample_fetch
 ```
 
 This will result in the following console logs:
+
+```
+got 10 records from last query
+First record Record(
+    string='0x255309e019abaf74bf2d58d4020547c89f875842abae1c874fb0d5ae8eac9859', 
+    integer=14362177, 
+    decimal=0.14785533, 
+    time='2022-03-10T23:50:16+00:00'
+)
+```

@@ -38,16 +38,24 @@ class ParameterType(Enum):
     TEXT = 'text'
     NUMBER = 'number'
     DATE = 'datetime'
-    LIST = 'list'
+    # TODO - not sure if this works or not...
+    # LIST = 'enum'
 
 
 class QueryParameter:
     """Class whose instances are Dune Compatible Query Parameters"""
 
-    def __init__(self, name: str, parameter_type: ParameterType, value: Any):
+    def __init__(
+            self,
+            name: str,
+            parameter_type: ParameterType,
+            value: Any,
+            # options: Optional[list[str]] = None
+    ):
         self.key: str = name
         self.type: ParameterType = parameter_type
         self.value = value
+        # self.options = options
 
     @classmethod
     def text_type(cls, name: str, value: str):
@@ -64,10 +72,10 @@ class QueryParameter:
         """Constructs a Query parameter of type date"""
         return cls(name, ParameterType.DATE, value)
 
-    @classmethod
-    def list_type(cls, name: str, value: list[str]):
-        """Constructs a Query parameter of type list"""
-        return cls(name, ParameterType.LIST, value)
+    # @classmethod
+    # def list_type(cls, name: str, options: list[str], value: str):
+    #     """Constructs a Query parameter of type list"""
+    #     return cls(name, ParameterType.LIST, value, options)
 
     def _value_str(self) -> str:
         match self.type:
@@ -75,9 +83,9 @@ class QueryParameter:
                 return self.value
             case (ParameterType.NUMBER):
                 return str(self.value)
-            case (ParameterType.LIST):
-                # List items separated by new line as (specified by Dune)
-                return "\n".join(self.value)
+            # case (ParameterType.LIST):
+            #     # List items separated by new line as (specified by Dune)
+            #     return "\n".join(self.value)
             case (ParameterType.DATE):
                 # This is the postgres string format of timestamptz
                 return self.value.strftime("%Y-%m-%d %H:%M:%S")
@@ -86,11 +94,16 @@ class QueryParameter:
 
     def to_dict(self) -> dict[str, str]:
         """Converts QueryParameter into string json format accepted by Dune API"""
-        return {
+        results = {
             "key": self.key,
             "type": self.type.value,
             "value": self._value_str(),
         }
+        # if self.type == ParameterType.LIST:
+        #     results["enumOptions"] = self.options
+        #     for i, val in enumerate(self.options):
+        #         results[i] = val
+        return results
 
 
 class DuneAnalytics:
@@ -180,7 +193,7 @@ class DuneAnalytics:
             query: str,
             name: str,
             network: Network,
-            parameters: list[dict]
+            parameters: list[QueryParameter]
     ):
         """Initiates a new query"""
         query_data = {
@@ -201,7 +214,7 @@ class DuneAnalytics:
                     "is_archived": False,
                     "is_temp": False,
                     "tags": [],
-                    "parameters": parameters,
+                    "parameters": [p.to_dict() for p in parameters],
                     "visualizations": {
                         "data": [],
                         "on_conflict": {
@@ -218,112 +231,8 @@ class DuneAnalytics:
                 },
                 "session_id": 84
             },
-            "query": """
-                mutation UpsertQuery(
-                  $session_id: Int!, 
-                  $object: queries_insert_input!, 
-                  $on_conflict: queries_on_conflict!, 
-                  $favs_last_24h: Boolean! = false, 
-                  $favs_last_7d: Boolean! = false, 
-                  $favs_last_30d: Boolean! = false, 
-                  $favs_all_time: Boolean! = true
-                ) {
-                  insert_queries_one(object: $object, on_conflict: $on_conflict) {
-                    ...Query
-                    favorite_queries(where: {user_id: {_eq: $session_id}}, limit: 1) {
-                      created_at
-                      __typename
-                    }
-                    __typename
-                  }
-                }
-                
-                fragment Query on queries {
-                  ...BaseQuery
-                  ...QueryVisualizations
-                  ...QueryForked
-                  ...QueryUsers
-                  ...QueryFavorites
-                  __typename
-                }
-                
-                fragment BaseQuery on queries {
-                  id
-                  dataset_id
-                  name
-                  description
-                  query
-                  private_to_group_id
-                  is_temp
-                  is_archived
-                  created_at
-                  updated_at
-                  schedule
-                  tags
-                  parameters
-                  __typename
-                }
-                
-                fragment QueryVisualizations on queries {
-                  visualizations {
-                    id
-                    type
-                    name
-                    options
-                    created_at
-                    __typename
-                  }
-                  __typename
-                }
-                
-                fragment QueryForked on queries {
-                  forked_query {
-                    id
-                    name
-                    user {
-                      name
-                      __typename
-                    }
-                    __typename
-                  }
-                  __typename
-                }
-                
-                fragment QueryUsers on queries {
-                  user {
-                    ...User
-                    __typename
-                  }
-                  __typename
-                }
-                
-                fragment User on users {
-                  id
-                  name
-                  profile_image_url
-                  __typename
-                }
-                
-                fragment QueryFavorites on queries {
-                  query_favorite_count_all @include(if: $favs_all_time) {
-                    favorite_count
-                    __typename
-                  }
-                  query_favorite_count_last_24h @include(if: $favs_last_24h) {
-                    favorite_count
-                    __typename
-                  }
-                  query_favorite_count_last_7d @include(if: $favs_last_7d) {
-                    favorite_count
-                    __typename
-                  }
-                  query_favorite_count_last_30d @include(if: $favs_last_30d) {
-                    favorite_count
-                    __typename
-                  }
-                  __typename
-                }
-            """,
+            # pylint: disable=line-too-long
+            "query": "mutation UpsertQuery($session_id: Int!, $object: queries_insert_input!, $on_conflict: queries_on_conflict!, $favs_last_24h: Boolean! = false, $favs_last_7d: Boolean! = false, $favs_last_30d: Boolean! = false, $favs_all_time: Boolean! = true) {\n  insert_queries_one(object: $object, on_conflict: $on_conflict) {\n    ...Query\n    favorite_queries(where: {user_id: {_eq: $session_id}}, limit: 1) {\n      created_at\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment Query on queries {\n  ...BaseQuery\n  ...QueryVisualizations\n  ...QueryForked\n  ...QueryUsers\n  ...QueryFavorites\n  __typename\n}\n\nfragment BaseQuery on queries {\n  id\n  dataset_id\n  name\n  description\n  query\n  private_to_group_id\n  is_temp\n  is_archived\n  created_at\n  updated_at\n  schedule\n  tags\n  parameters\n  __typename\n}\n\nfragment QueryVisualizations on queries {\n  visualizations {\n    id\n    type\n    name\n    options\n    created_at\n    __typename\n  }\n  __typename\n}\n\nfragment QueryForked on queries {\n  forked_query {\n    id\n    name\n    user {\n      name\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment QueryUsers on queries {\n  user {\n    ...User\n    __typename\n  }\n  __typename\n}\n\nfragment User on users {\n  id\n  name\n  profile_image_url\n  __typename\n}\n\nfragment QueryFavorites on queries {\n  query_favorite_count_all @include(if: $favs_all_time) {\n    favorite_count\n    __typename\n  }\n  query_favorite_count_last_24h @include(if: $favs_last_24h) {\n    favorite_count\n    __typename\n  }\n  query_favorite_count_last_7d @include(if: $favs_last_7d) {\n    favorite_count\n    __typename\n  }\n  query_favorite_count_last_30d @include(if: $favs_last_30d) {\n    favorite_count\n    __typename\n  }\n  __typename\n}\n",
         }
         self.handle_dune_request(query_data)
 
@@ -335,14 +244,10 @@ class DuneAnalytics:
                 "query_id": self.query_id,
                 "parameters": []
             },
-            "query": """
-                mutation ExecuteQuery($query_id: Int!, $parameters: [Parameter!]!) {
-                  execute_query(query_id: $query_id, parameters: $parameters) {
-                    job_id
-                    __typename
-                  }
-                }
-            """
+            "query":
+                "mutation ExecuteQuery($query_id: Int!, $parameters: [Parameter!]!)"
+                "{\n  execute_query(query_id: $query_id, parameters: $parameters) "
+                "{\n    job_id\n    __typename\n  }\n}\n"
         }
         self.handle_dune_request(query_data)
 
@@ -354,15 +259,9 @@ class DuneAnalytics:
         query_data = {
             "operationName": "GetResult",
             "variables": {"query_id": self.query_id},
-            "query": """
-                query GetResult($query_id: Int!, $parameters: [Parameter!]) {
-                  get_result(query_id: $query_id, parameters: $parameters) {
-                    job_id
-                    result_id
-                    __typename
-                  }
-                }
-            """
+            "query": "query GetResult($query_id: Int!, $parameters: [Parameter!]) "
+                     "{\n  get_result(query_id: $query_id, parameters: $parameters) "
+                     "{\n    job_id\n    result_id\n    __typename\n  }\n}\n"
         }
 
         data = self.handle_dune_request(query_data)
@@ -374,22 +273,12 @@ class DuneAnalytics:
         query_data = {
             "operationName": "FindResultDataByResult",
             "variables": {"result_id": result_id},
-            "query": """
-                    query FindResultDataByResult($result_id: uuid!){
-                      query_results(where: {id: {_eq: $result_id}}){
-                        id
-                        job_id
-                        error
-                        runtime
-                       generated_at
-                        columns
-                        __typename
-                      get_result_by_result_id(args: {want_result_id: $result_id}){
-                        data
-                        __typename
-                      }
-                    }
-                    """
+            "query": "query FindResultDataByResult($result_id: uuid!) "
+                     "{\n  query_results(where: {id: {_eq: $result_id}}) "
+                     "{\n    id\n    job_id\n    error\n    runtime\n    "
+                     "generated_at\n    columns\n    __typename\n  }"
+                     "\n  get_result_by_result_id(args: {want_result_id: $result_id}) "
+                     "{\n    data\n    __typename\n  }\n}\n"
         }
 
         return self.handle_dune_request(query_data)
@@ -413,7 +302,7 @@ class DuneAnalytics:
             self,
             query_filepath: str,
             network: Network,
-            parameters: list[dict[str, str]] = None,
+            parameters: Optional[list[QueryParameter]] = None,
             ping_frequency: int = 5,
             max_retries: int = 2,
     ) -> list[dict]:
