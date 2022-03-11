@@ -249,7 +249,7 @@ class DuneAnalytics:
                 "{\n  execute_query(query_id: $query_id, parameters: $parameters) "
                 "{\n    job_id\n    __typename\n  }\n}\n"
         }
-        self.handle_dune_request(query_data)
+        return self.handle_dune_request(query_data)
 
     def query_result_id(self) -> str:
         """
@@ -300,7 +300,7 @@ class DuneAnalytics:
     # pylint: disable=too-many-arguments
     def query_initiate_execute_await(
             self,
-            query_filepath: str,
+            query_str: str,
             network: Network,
             parameters: Optional[list[QueryParameter]] = None,
             ping_frequency: int = 5,
@@ -308,7 +308,7 @@ class DuneAnalytics:
     ) -> list[dict]:
         """Pushes new query and executes, awaiting query completion"""
         self.initiate_new_query(
-            query=self.open_query(query_filepath),
+            query=query_str,
             network=network,
             name="Auto Generated Query",
             parameters=parameters or []
@@ -344,24 +344,20 @@ class DuneAnalytics:
 
     def fetch(
             self,
-            query_filepath: str,
+            query_str: str,
             network: Network,
             name: str,
             parameters: Optional[list[dict[str, str]]],
     ) -> list[dict]:
         """
-        :param query_filepath: path to sql file to execute
+        :param query_str: sql string to execute
         :param network: Network enum variant
         :param name: optional name of what is being fetched (for logging)
         :param parameters: optional parameters to be included in query
         :return: list of records as dictionaries
         """
         print(f"Fetching {name} on {network}...")
-        return self.query_initiate_execute_await(
-            query_filepath,
-            network,
-            parameters
-        )
+        return self.query_initiate_execute_await(query_str, network, parameters)
 
     @staticmethod
     def open_query(filepath: str) -> str:

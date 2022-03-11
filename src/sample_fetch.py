@@ -17,7 +17,7 @@ class Record:
 def fetch_records(dune: DuneAnalytics) -> list[Record]:
     """Initiates and executes Dune query, returning results as Python Objects"""
     results = dune.query_initiate_execute_await(
-        query_filepath="./src/sample_query.sql",
+        query_str=dune.open_query("./src/sample_query.sql"),
         network=Network.MAINNET,
         parameters=[
             QueryParameter.number_type('IntParam', 10),
