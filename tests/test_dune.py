@@ -21,14 +21,14 @@ class TestDuneAnalytics(unittest.TestCase):
         self.dune.open_query = MagicMock(return_value="")
 
         with self.assertRaises(Exception):
-            self.dune.query_initiate_execute_await(
+            self.dune._initiate_execute_await(
                 query_str="",
                 network=Network.MAINNET,
                 max_retries=0
             )
 
         self.assertEqual(
-            self.dune.query_initiate_execute_await(
+            self.dune._initiate_execute_await(
                 query_str="",
                 network=Network.MAINNET,
                 max_retries=1
@@ -36,7 +36,7 @@ class TestDuneAnalytics(unittest.TestCase):
 
         self.dune.execute_and_await_results = Mock(side_effect=Exception("Max retries"))
         with self.assertRaises(Exception):
-            self.dune.query_initiate_execute_await(
+            self.dune._initiate_execute_await(
                 query_str="",
                 network=Network.MAINNET,
                 max_retries=2

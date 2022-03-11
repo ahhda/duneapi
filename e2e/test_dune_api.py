@@ -7,7 +7,7 @@ class TestDuneAnalytics(unittest.TestCase):
     def test_interface(self):
         """
         This test indirectly touches all of
-        - query_initiate_execute_await
+        - fetch
         - initiate_new_query
         - execute_and_await_results
         - execute_query
@@ -17,7 +17,7 @@ class TestDuneAnalytics(unittest.TestCase):
         dune = DuneAnalytics.new_from_environment()
 
         with self.assertRaises(Exception):
-            res = dune.query_initiate_execute_await(
+            res = dune.fetch(
                 query_filepath="./e2e/test_query.sql",
                 network=Network.MAINNET,
                 parameters=[

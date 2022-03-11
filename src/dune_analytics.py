@@ -298,7 +298,7 @@ class DuneAnalytics:
         return response_json
 
     # pylint: disable=too-many-arguments
-    def query_initiate_execute_await(
+    def _initiate_execute_await(
             self,
             query_str: str,
             network: Network,
@@ -357,7 +357,7 @@ class DuneAnalytics:
         :return: list of records as dictionaries
         """
         print(f"Fetching {name} on {network}...")
-        return self.query_initiate_execute_await(query_str, network, parameters)
+        return self._initiate_execute_await(query_str, network, parameters)
 
     @staticmethod
     def open_query(filepath: str) -> str:
