@@ -17,8 +17,7 @@ jobs:
           pip install -r requirements.txt
       - name: Lint
         run:
-          pylint src/
-          black --check ./
+          pylint src/ && black --check ./
       - name: Unit Tests
         run:
           python -m pytest tests/
