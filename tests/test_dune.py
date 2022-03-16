@@ -11,9 +11,8 @@ class TestNetworkEnum(unittest.TestCase):
 
 
 class TestDuneAnalytics(unittest.TestCase):
-
     def setUp(self) -> None:
-        self.dune = DuneAnalytics('user', 'password', 0)
+        self.dune = DuneAnalytics("user", "password", 0)
 
     def test_retry(self):
         self.dune.execute_and_await_results = MagicMock(return_value=1)
@@ -22,47 +21,29 @@ class TestDuneAnalytics(unittest.TestCase):
 
         with self.assertRaises(Exception):
             self.dune._initiate_execute_await(
-                query_str="",
-                network=Network.MAINNET,
-                max_retries=0
+                query_str="", network=Network.MAINNET, max_retries=0
             )
 
         self.assertEqual(
             self.dune._initiate_execute_await(
-                query_str="",
-                network=Network.MAINNET,
-                max_retries=1
-            ), 1)
+                query_str="", network=Network.MAINNET, max_retries=1
+            ),
+            1,
+        )
 
         self.dune.execute_and_await_results = Mock(side_effect=Exception("Max retries"))
         with self.assertRaises(Exception):
             self.dune._initiate_execute_await(
-                query_str="",
-                network=Network.MAINNET,
-                max_retries=2
+                query_str="", network=Network.MAINNET, max_retries=2
             )
 
     def test_parse_response(self):
         sample_response = {
-            "data": {
-                "get_result_by_result_id": [
-                    {
-                        "data": {
-                            "col1": 1,
-                            "col2": 2
-                        }
-                    }
-                ]
-            }
+            "data": {"get_result_by_result_id": [{"data": {"col1": 1, "col2": 2}}]}
         }
-        expected_result = [
-            {
-                "col1": 1,
-                "col2": 2
-            }
-        ]
+        expected_result = [{"col1": 1, "col2": 2}]
         self.assertEqual(self.dune.parse_response(sample_response), expected_result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

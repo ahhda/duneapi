@@ -8,6 +8,7 @@ from src.dune_analytics import DuneAnalytics, Network, QueryParameter
 @dataclass
 class Record:
     """Total amount reimbursed for accounting period"""
+
     string: str
     integer: int
     decimal: float
@@ -20,25 +21,24 @@ def fetch_records(dune: DuneAnalytics) -> list[Record]:
         query_str=dune.open_query("./src/sample_query.sql"),
         network=Network.MAINNET,
         parameters=[
-            QueryParameter.number_type('IntParam', 10),
+            QueryParameter.number_type("IntParam", 10),
             QueryParameter.date_type(
-                'DateParam',
-                datetime.strptime('2022-03-10', "%Y-%m-%d")
+                "DateParam", datetime.strptime("2022-03-10", "%Y-%m-%d")
             ),
-            QueryParameter.text_type('TextParam', 'aba')
-        ]
+            QueryParameter.text_type("TextParam", "aba"),
+        ],
     )
     return [
         Record(
-            string=row['block_hash'],
-            integer=row['number'],
-            decimal=row['tx_fees'],
-            time=row['time'],
+            string=row["block_hash"],
+            integer=row["number"],
+            decimal=row["tx_fees"],
+            time=row["time"],
         )
         for row in results
     ]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     records = fetch_records(DuneAnalytics.new_from_environment())
     print("First result:", records[0])

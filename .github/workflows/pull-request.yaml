@@ -18,6 +18,9 @@ jobs:
       - name: Lint
         run:
           pylint src/
+      - name: Black
+        run:
+          black --check ./
       - name: Unit Tests
         run:
           python -m pytest tests/
