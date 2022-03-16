@@ -20,13 +20,11 @@ class TestDuneAnalytics(unittest.TestCase):
             res = dune.fetch(
                 query_filepath="./e2e/test_query.sql",
                 network=Network.MAINNET,
-                parameters=[
-                    QueryParameter.number_type('IntParameter', 1)
-                ]
+                parameters=[QueryParameter.number_type("IntParameter", 1)],
             )
             self.assertEqual(len(res), 1)
-            self.assertEqual(res[0]['value'], 9)
+            self.assertEqual(res[0]["value"], 9)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
