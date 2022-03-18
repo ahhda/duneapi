@@ -1,1 +1,1 @@
-select 10 - '{{IntParameter}}' as value
+select 10 - '{{IntParameter}}' as val
