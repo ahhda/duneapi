@@ -1,13 +1,8 @@
 import unittest
 from unittest.mock import MagicMock, Mock
 
-from src.dune_analytics import DuneAnalytics, Network
-
-
-class TestNetworkEnum(unittest.TestCase):
-    def test_string_rep(self):
-        self.assertEqual(str(Network.MAINNET), "Ethereum mainnet")
-        self.assertEqual(str(Network.GCHAIN), "Gnosis chain")
+from src.dune_analytics import DuneAnalytics
+from src.types import Network
 
 
 class TestDuneAnalytics(unittest.TestCase):
@@ -16,7 +11,7 @@ class TestDuneAnalytics(unittest.TestCase):
 
     def test_retry(self):
         self.dune.execute_and_await_results = MagicMock(return_value=1)
-        self.dune.initiate_new_query = MagicMock(return_value=None)
+        self.dune.initiate_query = MagicMock(return_value=None)
         self.dune.open_query = MagicMock(return_value="")
         self.dune.max_retries = 0
         with self.assertRaises(Exception):

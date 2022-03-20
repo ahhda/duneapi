@@ -3,7 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 
-from src.dune_analytics import DuneAnalytics, Network, QueryParameter
+from src.dune_analytics import DuneAnalytics
+from src.types import Network, QueryParameter
+from src.util import open_query
 
 
 @dataclass
@@ -30,14 +32,12 @@ class Record:
 def fetch_records(dune: DuneAnalytics) -> list[Record]:
     """Initiates and executes Dune query, returning results as Python Objects"""
     results = dune.fetch(
-        query_str=dune.open_query("./src/sample_query.sql"),
+        query_str=open_query("./src/example/sample_query.sql"),
         name="Sample Query",
         network=Network.MAINNET,
         parameters=[
             QueryParameter.number_type("IntParam", 10),
-            QueryParameter.date_type(
-                "DateParam", datetime.strptime("2022-03-10", "%Y-%m-%d")
-            ),
+            QueryParameter.date_type("DateParam", datetime(2022, 3, 10, 12, 30, 30)),
             QueryParameter.text_type("TextParam", "aba"),
         ],
     )
