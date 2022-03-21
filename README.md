@@ -11,7 +11,7 @@ bdccd5ba543a8f3679e2c81e18cee846af47bc52
 python3 -m venv venv
 source ./env/bin/activate
 pip install -r requirements.txt
-cp .env.sample .env
+cp .env.sample .env       <----- Copy your Dune credentials here!
 source .env
 ```
 
@@ -29,7 +29,7 @@ found here initiate and execute query, returning the results.
 To fetch some sample ethereum block data, run the sample script as:
 
 ```shell
-python -m src.sample_fetch
+python -m src.example.sample_fetch
 ```
 
 This will result in the following console logs:

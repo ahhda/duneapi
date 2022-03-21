@@ -10,7 +10,7 @@ from src.util import open_query
 
 @dataclass
 class Record:
-    """Total amount reimbursed for accounting period"""
+    """Arbitrary record with a few different data types"""
 
     string: str
     integer: int
