@@ -1,9 +1,11 @@
 """Sample Fetch script from DuneAnalytics"""
 from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import datetime
 
-from src.dune_analytics import DuneAnalytics
+from src.dune_api import DuneAPI
+from src.dune_query import DuneQuery
 from src.types import Network, QueryParameter
 from src.util import open_query
 
@@ -29,10 +31,10 @@ class Record:
         )
 
 
-def fetch_records(dune: DuneAnalytics) -> list[Record]:
+def fetch_records(dune: DuneAPI) -> list[Record]:
     """Initiates and executes Dune query, returning results as Python Objects"""
-    results = dune.fetch(
-        query_str=open_query("./src/example/sample_query.sql"),
+    sample_query = DuneQuery.from_environment(
+        raw_sql=open_query("./src/example/sample_query.sql"),
         name="Sample Query",
         network=Network.MAINNET,
         parameters=[
@@ -41,9 +43,10 @@ def fetch_records(dune: DuneAnalytics) -> list[Record]:
             QueryParameter.text_type("TextParam", "aba"),
         ],
     )
+    results = dune.fetch(sample_query)
     return [Record.from_dict(row) for row in results]
 
 
 if __name__ == "__main__":
-    records = fetch_records(DuneAnalytics.new_from_environment())
+    records = fetch_records(DuneAPI.new_from_environment())
     print("First result:", records[0])
