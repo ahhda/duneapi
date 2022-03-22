@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import MagicMock, Mock
 
-from src.dune_api import DuneAPI
-from src.dune_query import DuneQuery
-from src.types import Network
+from src.duneapi.api import DuneAPI
+from src.duneapi.query import DuneQuery
+from src.duneapi.types import Network
 
 
 class TestDuneAnalytics(unittest.TestCase):
