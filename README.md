@@ -1,7 +1,11 @@
 # Dune Analytics API
+[![Python 3.9](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3102/) 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
+[![Build](https://github.com/bh2smith/duneapi/actions/workflows/pull-request.yaml/badge.svg)](https://github.com/bh2smith/duneapi/actions/workflows/pull-request.yml)
 
 A simple framework for interacting with Dune Analytics unsupported API. The primary
-class (`DuneAnalytics`) of this repo is adapted from
+class (`DuneAPI`) of this repo is adapted from
 https://github.com/itzmestar/duneanalytics at commit
 bdccd5ba543a8f3679e2c81e18cee846af47bc52
 
