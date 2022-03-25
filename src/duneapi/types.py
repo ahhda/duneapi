@@ -6,6 +6,7 @@ All operations/routes available for interaction with Dune API - looks like graph
 """
 from __future__ import annotations
 
+import re
 import json
 import os
 from dataclasses import dataclass
@@ -77,16 +78,53 @@ class QueryResults:
 class Network(Enum):
     """Enum for supported EVM networks"""
 
+    SOLANA = 1
     MAINNET = 4
     GCHAIN = 6
+    POLYGON = 7
+    OPTIMISM_V1 = 8
+    BINANCE = 9
+    OPTIMISM_V2 = 10
 
     def __str__(self) -> str:
+        result = super.__str__(self)
         match self:
+            case Network.SOLANA:
+                result = "Solana"
             case Network.MAINNET:
-                return "Ethereum mainnet"
+                result = "Ethereum Mainnet"
             case Network.GCHAIN:
-                return "Gnosis chain"
-        return super.__str__(self)
+                result = "Gnosis Chain"
+            case Network.POLYGON:
+                result = "Polygon"
+            case Network.OPTIMISM_V1:
+                result = "Optimism (OVM 1.0)"
+            case Network.OPTIMISM_V2:
+                result = "Optimism (OVM 2.0)"
+            case Network.BINANCE:
+                result = "Binance Smart Chain"
+        return result
+
+    @classmethod
+    def try_from_string(cls, network_str: str) -> Optional[Network]:
+        """
+        Attempts to parse network name from string.
+        returns None is no match
+        """
+        patterns = {
+            r"(.*)mainnet": cls.MAINNET,
+            r"g(.*)chain": cls.GCHAIN,
+            r"solana": cls.SOLANA,
+            r"poly": cls.POLYGON,
+            r"optimism(.*)1": cls.OPTIMISM_V1,
+            r"optimism(.*)2": cls.OPTIMISM_V2,
+            r"bsc": cls.BINANCE,
+            r"binance": cls.BINANCE,
+        }
+        for pattern, network in patterns.items():
+            if re.match(pattern, network_str, re.IGNORECASE):
+                return network
+        return None
 
 
 class ParameterType(Enum):
