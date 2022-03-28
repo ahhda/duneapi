@@ -72,10 +72,8 @@ class DuneAPI:
             os.environ["DUNE_USER"],
             os.environ["DUNE_PASSWORD"],
         )
-        print(os.environ)
         # loging and fetch_auth token don't really need to be here
         dune.login()
-
         return dune
 
     def login(self) -> None:
