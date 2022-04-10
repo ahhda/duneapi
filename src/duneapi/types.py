@@ -6,9 +6,9 @@ All operations/routes available for interaction with Dune API - looks like graph
 """
 from __future__ import annotations
 
-import re
 import json
 import os
+import re
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
@@ -16,7 +16,10 @@ from typing import Any, Collection, Optional
 
 from dotenv import load_dotenv
 
+from .logger import set_log
 from .util import datetime_parser, open_query, postgres_date
+
+log = set_log(__name__)
 
 PostData = dict[str, Collection[str]]
 # key_map = {"outer1": {"inner11", "inner12}, "outer2": {"inner21"}}
@@ -42,7 +45,10 @@ class MetaData:
 
     def __init__(self, obj: str):
         """
+        Constructor method
         :param obj: input should have the following form
+
+        Example input:
         {
             'id': '3158cc2c-5ed1-4779-b523-eeb9c3b34b21',
             'job_id': '093e440d-66ce-4c00-81ec-2406f0403bc0',
@@ -240,7 +246,12 @@ class QueryParameter:
         raise ValueError(f"Could not parse Query parameter from {obj}")
 
     def __str__(self) -> str:
-        return f"QueryParameter(name: {self.key}, value: {self.value}, type: {self.type.value})"
+        return (
+            f"QueryParameter("
+            f"name: {self.key}, "
+            f"value: {self.value}, "
+            f"type: {self.type.value})"
+        )
 
 
 @dataclass
@@ -312,6 +323,7 @@ class DuneQuery:
             self.query_id == other.query_id,
             self.parameters == other.parameters,
         ]
+        log.debug(f"Equality Conditions: {equality_conditions}")
         return all(equality_conditions)
 
     @classmethod
