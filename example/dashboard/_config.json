@@ -12,14 +12,13 @@
       "description": "Description of Example 1",
       "query_file": "query1.sql",
       "network": "Ethereum Mainnet",
-      "requires": "./example/dashboard/base_query.sql",
       "parameters": []
     },
     {
       "id": 585223,
       "name": "Query2 polygon",
       "description": "Another Description of Example 2",
-      "query_file": "query2.sql",
+      "query_file": "query2-polygon.sql",
       "network": "Polygon",
       "parameters": [
         {
@@ -30,10 +29,29 @@
       ]
     },
     {
+      "id": 666726,
+      "name": "Blocks Between",
+      "description": "",
+      "query_file": "blocks-between.sql",
+      "network": "Ethereum Mainnet",
+      "parameters": [
+        {
+          "key": "Begin",
+          "value": "2022-03-10 00:00:00",
+          "type": "datetime"
+        },
+        {
+          "key": "End",
+          "value": "2022-03-10 00:00:30",
+          "type": "datetime"
+        }
+      ]
+    },
+    {
       "id": 533351,
       "name": "Query2",
       "description": "Description of Example 2",
-      "query_file": "query2.sql",
+      "query_file": "query2-polygon.sql",
       "network": "Gnosis Chain",
       "parameters": [
         {
