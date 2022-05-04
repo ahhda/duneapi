@@ -11,6 +11,7 @@
       "name": "Query1",
       "description": "Description of Example 1",
       "query_file": "query1.sql",
+      "requires": "./example/dashboard/base_query.sql",
       "network": "Ethereum Mainnet",
       "parameters": []
     },
