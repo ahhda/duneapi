@@ -34,7 +34,9 @@ class TestMockDB(unittest.TestCase):
         )
 
         cur.execute(table)
-        cur.execute(insert)
+        cur.execute(insert, values)
+        # Its weird the way values is used twice here!
+
         cur.execute("SELECT * FROM student")
         x = cur.fetchall()
         self.assertEqual(1, len(x))
