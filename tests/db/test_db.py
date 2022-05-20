@@ -52,11 +52,11 @@ class TestMockDB(unittest.TestCase):
 
         data_dir = "tests/data"
         for filename in os.listdir(data_dir):
+            table = filename.replace(".csv", "")
             with open(os.path.join(data_dir, filename), "r") as dat_file:
-                reader = csv.DictReader(dat_file)
-                fields = reader.fieldnames
-                table = filename.replace(".csv", "")
-                values = [row.values() for row in reader]
+                reader = dat_file.readlines()
+                fields = reader[0]
+                values = reader[1:]
                 insert_query = (
                     f"INSERT INTO {table} {fields}" f"VALUES ({','.join(values[:5])});"
                 )
