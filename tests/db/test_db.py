@@ -92,6 +92,12 @@ class TestMockDB(unittest.TestCase):
         cur.execute("SELECT * FROM erc20.tokens;")
         x = cur.fetchall()
         self.assertEqual(5, len(x))
+        for rec in x:
+            b = rec[0]
+            print("Bytea record", b)
+            print("Decoded", b.decode('utf-8'))
+        self.assertEqual(1, 0)
+
 
 
 if __name__ == "__main__":
