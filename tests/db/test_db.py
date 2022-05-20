@@ -56,9 +56,9 @@ class TestMockDB(unittest.TestCase):
             with open(os.path.join(data_dir, filename), "r") as dat_file:
                 reader = dat_file.readlines()
                 fields = reader[0]
-                values = reader[1:]
+                values = [f"({row})" for row in reader[1:]]
                 insert_query = (
-                    f"INSERT INTO {table} {fields}" f"VALUES ({','.join(values[:5])});"
+                    f"INSERT INTO {table} ({fields}) VALUES {','.join(values[:5])};"
                 )
                 print(insert_query)
 
