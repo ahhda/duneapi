@@ -51,6 +51,7 @@ class TestMockDB(unittest.TestCase):
         cur.execute(populate_query)
         cur.execute("SELECT * FROM erc20.\"ERC20_evt_Transfer\" LIMIT 100")
         x = cur.fetchall()
+        self.assertEqual(100, len(x))
         print(x)
 
 
