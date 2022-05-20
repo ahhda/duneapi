@@ -64,9 +64,9 @@ class TestMockDB(unittest.TestCase):
                 for row in reader[1:]:
                     row_string = ",".join([f"'{str(item)}'" if item else "" for item in row.split(",")])
                     values.append(f"({row_string})")
-
+                value_string = ','.join(values[:5]).replace(",,", ",NULL,")
                 insert_query = (
-                    f"INSERT INTO {table} ({fields}) VALUES {','.join(values[:5])};"
+                    f"INSERT INTO {table} ({fields}) VALUES {value_string};"
                 )
             print("Inserting data", insert_query)
             cur.execute(insert_query)
