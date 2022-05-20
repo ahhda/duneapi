@@ -50,6 +50,8 @@ class TestMockDB(unittest.TestCase):
         with open("tests/build_schema.sql", "r", encoding="utf-8") as file:
             populate_query = file.read()
 
+        cur.execute(populate_query)
+
         data_dir = "tests/data"
         for filename in os.listdir(data_dir):
             table = filename.replace(".csv", "")
@@ -60,11 +62,13 @@ class TestMockDB(unittest.TestCase):
                 insert_query = (
                     f"INSERT INTO {table} ({fields}) VALUES {','.join(values[:5])};"
                 )
-                print(insert_query)
+            cur.execute(insert_query)
+            print(insert_query)
 
-        cur.execute(populate_query)
+        cur.execute("SELECT * FROM erc20.tokens;")
         x = cur.fetchall()
-        self.assertEqual(1, len(x))
+        self.assertEqual(5, len(x))
+        print(x)
 
 
 if __name__ == "__main__":
