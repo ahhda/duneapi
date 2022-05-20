@@ -91,15 +91,10 @@ class TestMockDB(unittest.TestCase):
 
         cur.execute("SELECT * FROM erc20.tokens;")
         x = cur.fetchall()
-        self.assertEqual(5, len(x))
+        self.equal = self.assertEqual(5, len(x))
         for rec in x:
             b: memoryview = rec[0]
-            print("Bytea record", b)
-            # print("Decoded", b.decode('utf-8'))
-            # AttributeError: 'memoryview' object has no attribute 'decode'
-            print("Decoded memory view", bytes(b))
             print(f"Hex version 0x{b.hex()}")
-        self.assertEqual(1, 0)
 
 
 if __name__ == "__main__":
