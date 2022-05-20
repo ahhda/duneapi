@@ -25,11 +25,10 @@ jobs:
         ports:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
-        # volumes:
-        #   - ${{ github.workspace }}:/repo
+        volumes:
+          - ${{ github.workspace }}:/repo
     steps:
-      # Based on this suggestion: https://github.com/actions/checkout/issues/211#issuecomment-611986243
-      # - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Setup Python 3.10
         uses: actions/setup-python@v2
         with:
