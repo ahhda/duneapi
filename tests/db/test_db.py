@@ -60,7 +60,7 @@ class TestMockDB(unittest.TestCase):
                 fields = reader[0]
                 values = []
                 for row in reader[1:]:
-                    row_string = ','.join([str(item) for item in row.split(",")])
+                    row_string = ','.join([f"'{str(item)}'" for item in row.split(",")])
                     values.append(f"({row_string})")
 
                 insert_query = (
