@@ -63,7 +63,7 @@ CREATE SCHEMA gnosis_protocol_v2;
 CREATE TABLE erc20.tokens (
    contract_address bytea UNIQUE,
    symbol text,
-   decimals integer,
+   decimals integer
 );
 CREATE INDEX IF NOT EXISTS tokens_contract_address_decimals_idx ON erc20.tokens USING btree (contract_address) INCLUDE (decimals);
 CREATE INDEX IF NOT EXISTS tokens_symbol_decimals_idx ON erc20.tokens USING btree (symbol) INCLUDE (decimals);
