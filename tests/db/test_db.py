@@ -8,11 +8,10 @@ from tests.db.pg_client import connect
 def data_mapper(item: str) -> str:
     if item.startswith("\\x"):
         return f"'{item}'::bytea"
-    if item is None:
-        return "NULL"
+    if not item:
+        return ""
     if re.match(r"^\d*.\d*$", item):
         return item
-
     return f"'{item}'"
 
 class TestMockDB(unittest.TestCase):
