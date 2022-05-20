@@ -34,7 +34,8 @@ def insert_query(data_dir: str, filename: str) -> str:
             row_string = ",".join(row_items)
             values.append(f"({row_string})")
 
-        value_string = ",\n".join(values)
+        value_string = ",\n".join(values[:5])
+
         return f"INSERT INTO {table} ({fields}) VALUES {value_string};"
 
 
@@ -86,7 +87,7 @@ class TestMockDB(unittest.TestCase):
         for filename in os.listdir(data_dir):
             query = insert_query(data_dir, filename)
             print("Inserting data", query)
-            cur.execute(insert_query)
+            cur.execute(query)
 
         cur.execute("SELECT * FROM erc20.tokens;")
         x = cur.fetchall()
