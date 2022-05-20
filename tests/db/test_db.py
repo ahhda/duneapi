@@ -45,7 +45,7 @@ class TestMockDB(unittest.TestCase):
         db_conn = connect()
         cur = db_conn.cursor()
 
-        with open('/tests/populate_db.sql', 'r', encoding='utf-8') as file:
+        with open('tests/populate_db.sql', 'r', encoding='utf-8') as file:
             populate_query = file.readlines()
 
         cur.execute(populate_query)
