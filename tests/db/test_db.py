@@ -1,3 +1,4 @@
+import base64
 import os
 import re
 import unittest
@@ -95,7 +96,9 @@ class TestMockDB(unittest.TestCase):
         for rec in x:
             b = rec[0]
             print("Bytea record", b)
-            print("Decoded", b.decode('utf-8'))
+            # print("Decoded", b.decode('utf-8'))
+            # AttributeError: 'memoryview' object has no attribute 'decode'
+            print("Decoded memory view", bytes(b))
         self.assertEqual(1, 0)
 
 
