@@ -1,9 +1,19 @@
-import csv
 import os
+import re
 import unittest
 
 from tests.db.pg_client import connect
 
+
+def data_mapper(item: str) -> str:
+    if item.startswith("\\x"):
+        return f"'{item}'::bytea"
+    if item is None:
+        return "NULL"
+    if re.match(r"^\d*.\d*$", item):
+        return item
+
+    return f"'{item}'"
 
 class TestMockDB(unittest.TestCase):
     def test_db_connect(self):
@@ -62,7 +72,8 @@ class TestMockDB(unittest.TestCase):
                 fields = reader[0]
                 values = []
                 for row in reader[1:]:
-                    row_string = ",".join([f"'{str(item)}'" if item else "" for item in row.split(",")])
+                    row_items = map(lambda t: data_mapper(t), row.split(","))
+                    row_string = ",".join(row_items)
                     values.append(f"({row_string})")
                 value_string = ','.join(values[:5]).replace(",,", ",NULL,")
                 insert_query = (
