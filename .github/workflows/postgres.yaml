@@ -28,6 +28,7 @@ jobs:
         volumes:
           - ${{ github.workspace }}/tests/data:/csvs
     steps:
+      # Based on this suggestion: https://github.com/actions/checkout/issues/211#issuecomment-611986243
       - run: sudo chown -R $USER:$USER /home/runner/work/duneapi/duneapi/tests
       - uses: actions/checkout@v2
       - name: Setup Python 3.10
