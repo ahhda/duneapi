@@ -25,6 +25,8 @@ jobs:
         ports:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
+        volumes:
+          - tests/data:/csvs
     steps:
       - uses: actions/checkout@v2
       - name: Setup Python 3.10

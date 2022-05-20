@@ -41,6 +41,17 @@ class TestMockDB(unittest.TestCase):
         x = cur.fetchall()
         self.assertEqual(1, len(x))
 
+    def test_db_connect(self):
+        db_conn = connect()
+        cur = db_conn.cursor()
+
+        with open('../populate_db.sql', 'r', encoding='utf-8') as file:
+            populate_query = file.readlines()
+
+        cur.execute(populate_query)
+        x = cur.fetchall()
+        self.assertEqual(1, len(x))
+
 
 if __name__ == "__main__":
     unittest.main()

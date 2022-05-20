@@ -214,8 +214,3 @@ COPY gnosis_protocol_v2.view_solvers
 FROM '/csv/gnosis_protocol_v2.view_solvers.csv'
 DELIMITER ','
 CSV HEADER;
-
-
-
-
-
