@@ -74,7 +74,8 @@ class TestMockDB(unittest.TestCase):
         cur.execute("SELECT * FROM erc20.tokens;")
         x = cur.fetchall()
         self.assertEqual(5, len(x))
-        print(x)
+        for row in x:
+            print(str(row[0]))
         self.assertEqual(1, 0)
 
 
