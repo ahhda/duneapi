@@ -99,6 +99,7 @@ class TestMockDB(unittest.TestCase):
             # print("Decoded", b.decode('utf-8'))
             # AttributeError: 'memoryview' object has no attribute 'decode'
             print("Decoded memory view", bytes(b))
+            print("Hex version", hex(b))
         self.assertEqual(1, 0)
 
 
