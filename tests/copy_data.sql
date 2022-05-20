@@ -1,3 +1,14 @@
+-- Copy CSV data into tables
+COPY erc20.tokens(contract_address, symbol, decimals)
+FROM '/csv/erc20.tokens.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY erc20."ERC20_evt_Transfer"
+FROM '/csv/erc20.ERC20_evt_Transfer.csv'
+DELIMITER ','
+CSV HEADER;
+
 COPY prices.usd
 FROM '/csv/prices.usd.csv'
 DELIMITER ','
