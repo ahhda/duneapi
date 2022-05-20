@@ -50,14 +50,16 @@ class TestMockDB(unittest.TestCase):
         with open("tests/build_schema.sql", "r", encoding="utf-8") as file:
             populate_query = file.read()
 
-        for filename in os.listdir('tests/data'):
-            with open(os.path.join('tests', filename), 'r') as dat_file:
+        data_dir = "tests/data"
+        for filename in os.listdir(data_dir):
+            with open(os.path.join(data_dir, filename), "r") as dat_file:
                 reader = csv.DictReader(dat_file)
                 fields = reader.fieldnames
                 table = filename.replace(".csv", "")
                 values = [row.values() for row in reader]
-                insert_query = f"INSERT INTO {table} {fields}" \
-                               f"VALUES ({','.join(values[:5])});"
+                insert_query = (
+                    f"INSERT INTO {table} {fields}" f"VALUES ({','.join(values[:5])});"
+                )
                 print(insert_query)
 
         cur.execute(populate_query)
