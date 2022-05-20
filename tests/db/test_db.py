@@ -91,7 +91,7 @@ class TestMockDB(unittest.TestCase):
 
         cur.execute("SELECT * FROM erc20.tokens;")
         x = cur.fetchall()
-        self.equal = self.assertEqual(5, len(x))
+        self.assertEqual(5, len(x))
         for rec in x:
             b: memoryview = rec[0]
             print(f"Hex version 0x{b.hex()}")
