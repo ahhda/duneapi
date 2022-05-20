@@ -7,6 +7,9 @@ jobs:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
 
+    steps:
+      - run: ln -sf /csv ${{ github.workspace }}/tests/data
+
     # Service containers to run with `runner-job`
     services:
       # Label used to access the service container
@@ -26,7 +29,7 @@ jobs:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
         volumes:
-          - ${{ github.workspace }}/tests/data:/csv
+          - /csv:/csv
     steps:
       # Based on this suggestion: https://github.com/actions/checkout/issues/211#issuecomment-611986243
       - run: sudo chown -R $USER:$USER /home/runner/work/duneapi/duneapi/tests
