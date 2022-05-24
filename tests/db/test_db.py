@@ -41,19 +41,17 @@ class TestMockDB(unittest.TestCase):
         x = cur.fetchall()
         self.assertEqual(1, len(x))
 
-    def test_db_connect(self):
+    def test_db_pre_populated(self):
         db_conn = connect()
         cur = db_conn.cursor()
 
-        with open("tests/populate_db.sql", "r", encoding="utf-8") as file:
-            populate_query = file.read()
+        # with open("tests/populate_db.sql", "r", encoding="utf-8") as file:
+        #     populate_query = file.read()
 
-        cur.execute(populate_query)
+        # cur.execute(populate_query)
         cur.execute("SELECT * FROM erc20.\"ERC20_evt_Transfer\" LIMIT 100")
         x = cur.fetchall()
         self.assertEqual(100, len(x))
-        self.assertEqual(1000, len(x))
-        print(x)
 
 
 if __name__ == "__main__":
